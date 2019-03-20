@@ -80,7 +80,7 @@ func addTestFetch(repo string, dgst digest.Digest, content []byte, m *testutil.R
 func addTestCatalog(route string, content []byte, link string, m *testutil.RequestResponseMap) {
 	headers := map[string][]string{
 		"Content-Length": {strconv.Itoa(len(content))},
-		"Content-Type":   {"application/json; charset=utf-8"},
+		"Content-Type":   {"application/json"},
 	}
 	if link != "" {
 		headers["Link"] = append(headers["Link"], link)
@@ -152,7 +152,7 @@ func TestBlobFetch(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if bytes.Compare(b, b1) != 0 {
+	if !bytes.Equal(b, b1) {
 		t.Fatalf("Wrong bytes values fetched: [%d]byte != [%d]byte", len(b), len(b1))
 	}
 
@@ -1062,7 +1062,7 @@ func TestObtainsErrorForMissingTag(t *testing.T) {
 			StatusCode: http.StatusNotFound,
 			Body:       errBytes,
 			Headers: http.Header(map[string][]string{
-				"Content-Type": {"application/json; charset=utf-8"},
+				"Content-Type": {"application/json"},
 			}),
 		},
 	})
